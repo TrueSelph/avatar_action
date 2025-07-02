@@ -1,4 +1,6 @@
-include:jac avatar_action;
-include:jac set_avatar;
-include:jac get_avatar;
-include:jac delete_avatar;
+import from actions.jivas.avatar_action {
+    avatar_action,
+    set_avatar,
+    get_avatar,
+    delete_avatar
+}

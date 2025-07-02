@@ -1,11 +1,10 @@
-import:py base64;
-import:jac from jivas.agent.core.agent { Agent }
-import:jac from jivas.agent.action.action { Action }
-import:jac from jivas.agent.action.actions { Actions }
-import:jac from jivas.agent.action.interact_graph_walker { interact_graph_walker }
+import from jivas.agent.core.agent { Agent }
+import from jivas.agent.action.action { Action }
+import from jivas.agent.action.actions { Actions }
+import from jivas.agent.action.interact_graph_walker { interact_graph_walker }
 
 
-walker get_avatar :interact_graph_walker: {
+walker get_avatar(interact_graph_walker) {
 
     has base64_prefix:bool = True;
     has response:str = None;

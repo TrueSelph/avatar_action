@@ -1,10 +1,9 @@
-import:py logging;
-import:py traceback;
-import:py from typing { Union, Optional }
-import:py from logging { Logger }
-import:jac from jivas.agent.action.action { Action }
+import logging;
+import from typing { Union, Optional }
+import from logging { Logger }
+import from jivas.agent.action.action { Action }
 
-node AvatarAction :Action: {
+node AvatarAction(Action) {
     # Registers a cron-like job to trigger agent actions on an interval.
 
     # set up logger
@@ -13,7 +12,7 @@ node AvatarAction :Action: {
     has image_data:str = "";
     has mimetype:str = "";
 
-    can set_avatar_image(image_data:str, mimetype:str) -> bool {
+    def set_avatar_image(image_data:str, mimetype:str) -> bool {
         # sets the image data and mimetype, updates agent
 
         self.image_data = image_data;
@@ -26,7 +25,7 @@ node AvatarAction :Action: {
         return False;
     }
 
-    can get_avatar_image(with_prefix:bool = True) -> Optional[str] {
+    def get_avatar_image(with_prefix:bool = True) -> Optional[str] {
         # returns the base64 encoded avatar image, with or without prefix
 
         if not self.image_data {
@@ -38,7 +37,7 @@ node AvatarAction :Action: {
         return self.image_data;
     }
 
-    can delete_avatar_image() -> bool {
+    def delete_avatar_image() -> bool {
         # deletes the avatar image data
 
         self.image_data = "";
@@ -51,7 +50,7 @@ node AvatarAction :Action: {
         return False;
     }
 
-    can healthcheck() -> Union[bool, dict] {
+    def healthcheck() -> Union[bool, dict] {
 
         if(not self.image_data){
             return {
