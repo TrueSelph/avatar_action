@@ -3,7 +3,7 @@
 import uuid
 
 import streamlit as st
-from jvclient.lib.utils import call_action_walker_exec, decode_base64_image
+from jvclient.lib.utils import call_api, decode_base64_image
 from jvclient.lib.widgets import app_header, app_update_action
 from streamlit_router import StreamlitRouter
 
@@ -26,7 +26,10 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
         with delete_container:
             if st.button("Delete Avatar"):
                 with st.spinner("Deleting avatar, please wait..."):
-                    call_action_walker_exec(agent_id, module_root, "delete_avatar")
+                    call_api(
+                        endpoint="action/walker/avatar_action/delete_avatar",
+                        json_data={"agent_id": agent_id},
+                    )
                     st.session_state[model_key]["image_data"] = None
                     st.rerun()
 
@@ -77,4 +80,8 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
 
 def call_set_avatar(agent_id: str, module_root: str, files: list) -> bool:
     """Set the avatar for the agent by calling the set_avatar action."""
-    return call_action_walker_exec(agent_id, module_root, "set_avatar", None, files)
+    return call_api(
+        endpoint="action/walker/avatar_action/set_avatar",
+        json_data={"agent_id": agent_id},
+        files=files,
+    )

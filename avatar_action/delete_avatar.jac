@@ -7,6 +7,7 @@ import from jivas.agent.action.agent_graph_walker { agent_graph_walker }
 walker delete_avatar(agent_graph_walker) {
 
     has response:str = None;
+    has reporting:bool = True;
 
     can on_agent with Agent entry {
         visit [-->](`?Actions);
@@ -18,6 +19,9 @@ walker delete_avatar(agent_graph_walker) {
 
     can on_action with Action entry {
         self.response = here.delete_avatar_image();
+        if self.reporting {
+            report self.response;
+        }
     }
 
 }

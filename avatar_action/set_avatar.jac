@@ -11,6 +11,7 @@ walker set_avatar(agent_graph_walker) {
 
     has files:list[dict] = [];
     has response:bool = False;
+    has reporting:bool = True;
 
     # set up logger
     static has logger:Logger = logging.getLogger(__name__);
@@ -32,6 +33,10 @@ walker set_avatar(agent_graph_walker) {
                     self.response = here.set_avatar_image(image_data = file_content_base64, mimetype = file['type']);
                 }
             }
+        }
+
+        if self.reporting {
+            report self.response;
         }
     }
 

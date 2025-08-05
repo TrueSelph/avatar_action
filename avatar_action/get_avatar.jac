@@ -8,6 +8,7 @@ walker get_avatar(agent_graph_walker) {
 
     has base64_prefix:bool = True;
     has response:str = None;
+    has reporting:bool = True;
 
     can on_agent with Agent entry {
         visit [-->](`?Actions);
@@ -19,6 +20,9 @@ walker get_avatar(agent_graph_walker) {
 
     can on_action with Action entry {
         self.response = here.get_avatar_image(self.base64_prefix);
+        if self.reporting {
+            report self.response;
+        }
     }
 
 }
