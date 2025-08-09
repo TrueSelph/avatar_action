@@ -4,7 +4,7 @@ import base64
 import uuid
 
 import streamlit as st
-from jvclient.lib.utils import call_api, decode_base64_image, get_reports_payload
+from jvclient.lib.utils import call_api, decode_base64_image
 from jvclient.lib.widgets import app_header, app_update_action
 from streamlit_router import StreamlitRouter
 
@@ -56,19 +56,16 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
                     # Read the file data
                     file_bytes = selected_file.read()
                     mimetype = selected_file.type
-                    
+
                     # Encode the bytes to base64 and format as data URI
-                    encoded_data = base64.b64encode(file_bytes).decode('utf-8')
-                    
+                    encoded_data = base64.b64encode(file_bytes).decode("utf-8")
+
                     # Make the API call with properly formatted data
                     result = call_api(
                         endpoint="action/walker/avatar_action/set_avatar",
                         json_data={
-                            "agent_id": agent_id, 
-                            "files": [{
-                                "content": encoded_data,
-                                "type": mimetype
-                            }]
+                            "agent_id": agent_id,
+                            "files": [{"content": encoded_data, "type": mimetype}],
                         },
                     )
 
@@ -80,9 +77,7 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
                         # now reload
                         st.rerun()
                     else:
-                        st.error("Failed to add avatar")    
-                    
+                        st.error("Failed to add avatar")
+
     # Add update button to apply changes
     app_update_action(agent_id, action_id)
-
-
