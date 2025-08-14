@@ -1,8 +1,8 @@
 package:
   name: jivas/avatar_action
   author: V75 Inc.
-  architype: AvatarAction
-  version: 0.0.1
+  archetype: AvatarAction
+  version: 0.1.2
   meta:
     title: Avatar Action
     description: Allows an avatar image to be added to the agent.
@@ -11,4 +11,4 @@ package:
   config:
     singleton: true
   dependencies:
-    jivas: ^2.0.0
+    jivas: ~2.1.0

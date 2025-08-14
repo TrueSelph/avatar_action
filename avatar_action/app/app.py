@@ -1,10 +1,11 @@
 """Streamlit app for managing agent avatar actions."""
 
+import base64
 import uuid
 
 import streamlit as st
-from jvcli.client.lib.utils import call_action_walker_exec, decode_base64_image
-from jvcli.client.lib.widgets import app_header, app_update_action
+from jvclient.lib.utils import call_api, decode_base64_image
+from jvclient.lib.widgets import app_header, app_update_action
 from streamlit_router import StreamlitRouter
 
 
@@ -26,7 +27,10 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
         with delete_container:
             if st.button("Delete Avatar"):
                 with st.spinner("Deleting avatar, please wait..."):
-                    call_action_walker_exec(agent_id, module_root, "delete_avatar")
+                    call_api(
+                        endpoint="action/walker/avatar_action/delete_avatar",
+                        json_data={"agent_id": agent_id},
+                    )
                     st.session_state[model_key]["image_data"] = None
                     st.rerun()
 
@@ -38,6 +42,7 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
         "Choose an image file",
         type=["jpg", "png", "jpeg"],
         key=st.session_state.uploader_key,
+        accept_multiple_files=False,
     )
 
     if selected_file is not None:
@@ -48,33 +53,31 @@ def render(router: StreamlitRouter, agent_id: str, action_id: str, info: dict) -
         with upload_container:
             if st.button("Upload"):
                 with st.spinner("Uploading avatar, please wait..."):
-                    # Prepare list of files if any are uploaded
-                    files_list = []
-                    if selected_file:
-                        files_list.append(
-                            (
-                                selected_file.name,
-                                selected_file.read(),
-                                selected_file.type,
-                            )
-                        )
+                    # Read the file data
+                    file_bytes = selected_file.read()
+                    mimetype = selected_file.type
 
-                    # Call the function to add the new text document
-                    if call_set_avatar(agent_id, module_root, files_list):
+                    # Encode the bytes to base64 and format as data URI
+                    encoded_data = base64.b64encode(file_bytes).decode("utf-8")
+
+                    # Make the API call with properly formatted data
+                    result = call_api(
+                        endpoint="action/walker/avatar_action/set_avatar",
+                        json_data={
+                            "agent_id": agent_id,
+                            "files": [{"content": encoded_data, "type": mimetype}],
+                        },
+                    )
+
+                    if result and result.status_code == 200:
                         # Remove uploader_key to hide the preview on success
                         del st.session_state["uploader_key"]
                         # Remove the model_key to refresh the model
                         del st.session_state[model_key]
                         # now reload
                         st.rerun()
-
                     else:
                         st.error("Failed to add avatar")
 
     # Add update button to apply changes
     app_update_action(agent_id, action_id)
-
-
-def call_set_avatar(agent_id: str, module_root: str, files: list) -> bool:
-    """Set the avatar for the agent by calling the set_avatar action."""
-    return call_action_walker_exec(agent_id, module_root, "set_avatar", None, files)

@@ -26,7 +26,7 @@ This action is designed to permit the upload and serving of an avatar image for 
 
 ## Dependencies
 
-- **Jivas:** `^2.0.0`
+- **Jivas:** `^2.1.0`
 
 ---
 
