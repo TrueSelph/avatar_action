@@ -9,3 +9,6 @@
 
 # 0.1.2
 - version bump
+
+# 0.1.3
+- Fix get_avatar_image bug

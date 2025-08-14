@@ -32,7 +32,7 @@ node AvatarAction(Action) {
             return None;
         }
         if with_prefix {
-            return f"data:{mimetype};base64,{self.image_data}";
+            return f"data:{self.mimetype};base64,{self.image_data}";
         }
         return self.image_data;
     }
