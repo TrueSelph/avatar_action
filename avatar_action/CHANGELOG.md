@@ -5,7 +5,10 @@
 - Updated to support Jivas 2.1.0
 
 # 0.1.1
-- version bump
+- Version bump
 
 # 0.1.2
-- version bump
+- Version bump
+
+# 0.1.3
+- Fix get_avatar_image bug
